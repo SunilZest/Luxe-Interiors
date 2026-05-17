@@ -1,0 +1,129 @@
+.hero {
+  position: relative;
+  height: 90vh;
+  min-height: 600px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to right, var(--color-overlay-start) 0%, var(--color-overlay-end) 100%);
+}
+
+.hero-container {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-content {
+  max-width: 800px;
+}
+
+.hero-title {
+  font-size: 4rem;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  color: var(--color-hero-text);
+  font-weight: 400;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--color-hero-text);
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+  font-style: italic;
+  font-weight: 300;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 1.5rem;
+}
+
+/* About Studio Section */
+.about-studio {
+  overflow: hidden;
+}
+
+.about-images-layered {
+  position: relative;
+  height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img-main {
+  width: 70%;
+  height: 450px;
+  object-fit: cover;
+  box-shadow: 20px 20px 60px var(--color-shadow);
+  position: relative;
+  z-index: 2;
+  border-radius: 2px;
+}
+
+.img-secondary {
+  width: 60%;
+  height: 400px;
+  object-fit: cover;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  z-index: 3;
+  border: 10px solid var(--color-bg);
+  box-shadow: 0 20px 40px var(--color-shadow);
+  border-radius: 2px;
+}
+
+.shape-bg-1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 300px;
+  height: 400px;
+  background-color: var(--color-bg-light);
+  z-index: 1;
+}
+
+.shape-bg-2 {
+  position: absolute;
+  top: 50px;
+  right: 50px;
+  width: 250px;
+  height: 250px;
+  background-color: var(--color-primary);
+  opacity: 0.2;
+  border-radius: 50%;
+  z-index: 1;
+}
+
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 3.5rem;
+  }
+  .about-images-layered {
+    height: 500px;
+    margin-top: 4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.75rem;
+  }
+  .hero-actions {
+    flex-direction: column;
+  }
+  .about-images-layered {
+    height: 400px;
+  }
+}
