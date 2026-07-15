@@ -18,7 +18,7 @@ const Footer = () => {
               <a href="#" aria-label="Social"><Globe size={20} /></a>
               <a href="#" aria-label="Social"><Share2 size={20} /></a>
               <a href="#" aria-label="Social"><Globe size={20} /></a>
-              <a href="#" aria-label="Social"><Share2 size={20} /></a>
+              {/* <a href="#" aria-label="Social"><Share2 size={20} /></a> */}
             </div>
           </div>
 
