@@ -1,11 +1,67 @@
+import { useState } from 'react';
 import { MapPin, Phone, Mail, Clock } from 'lucide-react';
 import './Contact.css';
 
+const SERVICE_OPTIONS = [
+  'Home Interior',
+  'Restaurant Interior',
+  'Office Interior',
+  'Other',
+];
+
+const initialForm = {
+  name: '',
+  email: '',
+  services: SERVICE_OPTIONS[0],
+  message: '',
+};
+
 const Contact = () => {
-  const handleSubmit = (e) => {
+  const [form, setForm] = useState(initialForm);
+  const [submitting, setSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState({ type: null, text: '' });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({ ...prev, [name]: value }));
+    if (feedback.type) setFeedback({ type: null, text: '' });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Form submission logic
-    alert("Message sent successfully!");
+    setSubmitting(true);
+    setFeedback({ type: null, text: '' });
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || !data.success) {
+        setFeedback({
+          type: 'error',
+          text: data.message || 'Something went wrong. Please try again.',
+        });
+        return;
+      }
+
+      setFeedback({
+        type: 'success',
+        text: data.message || 'Message sent successfully!',
+      });
+      setForm(initialForm);
+    } catch {
+      setFeedback({
+        type: 'error',
+        text: 'Could not reach the server. Make sure the API is running.',
+      });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -68,32 +124,87 @@ const Contact = () => {
               <form className="contact-form" onSubmit={handleSubmit}>
                 <h2 className="mb-8">Send a Message</h2>
 
+                {feedback.type && (
+                  <div
+                    className={`form-feedback form-feedback--${feedback.type}`}
+                    role="alert"
+                  >
+                    {feedback.text}
+                  </div>
+                )}
+
                 <div className="form-group">
-                  <label className="form-label">Full Name</label>
-                  <input type="text" className="form-control" required placeholder="John Doe" />
+                  <label className="form-label" htmlFor="contact-name">Full Name</label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    className="form-control"
+                    required
+                    placeholder="John Doe"
+                    value={form.name}
+                    onChange={handleChange}
+                    disabled={submitting}
+                  />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Email Address</label>
-                  <input type="email" className="form-control" required placeholder="john@example.com" />
+                  <label className="form-label" htmlFor="contact-email">Email Address</label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    className="form-control"
+                    required
+                    placeholder="john@example.com"
+                    value={form.email}
+                    onChange={handleChange}
+                    disabled={submitting}
+                  />
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Service of Interest</label>
-                  <select className="form-control">
-                    <option>Home Interior</option>
-                    <option>Restaurant Interior</option>
-                    <option>Office Interior</option>
-                    <option>Other</option>
+                  <label className="form-label" htmlFor="contact-services">Service of Interest</label>
+                  <select
+                    id="contact-services"
+                    name="services"
+                    className="form-control"
+                    required
+                    value={form.services}
+                    onChange={handleChange}
+                    disabled={submitting}
+                  >
+                    {SERVICE_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Message</label>
-                  <textarea className="form-control" rows="5" required placeholder="Tell us about your project..."></textarea>
+                  <label className="form-label" htmlFor="contact-message">Message</label>
+                  <textarea
+                    id="contact-message"
+                    name="message"
+                    className="form-control"
+                    rows="5"
+                    required
+                    placeholder="Tell us about your project..."
+                    value={form.message}
+                    onChange={handleChange}
+                    disabled={submitting}
+                  />
                 </div>
 
-                <button type="submit" className="btn-primary" style={{ width: '100%' }}>Submit Request</button>
+                <button
+                  type="submit"
+                  className="btn-primary"
+                  style={{ width: '100%' }}
+                  disabled={submitting}
+                >
+                  {submitting ? 'Sending…' : 'Submit Request'}
+                </button>
               </form>
             </div>
           </div>
