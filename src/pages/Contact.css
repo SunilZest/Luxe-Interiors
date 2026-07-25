@@ -44,3 +44,22 @@
 .contact-form .form-control {
   background-color: var(--color-form-bg);
 }
+
+.form-feedback {
+  padding: 0.875rem 1rem;
+  margin-bottom: 1.5rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+}
+
+.form-feedback--success {
+  background-color: rgba(34, 139, 34, 0.12);
+  color: #1a6b1a;
+  border: 1px solid rgba(34, 139, 34, 0.35);
+}
+
+.form-feedback--error {
+  background-color: rgba(180, 50, 50, 0.1);
+  color: #a82828;
+  border: 1px solid rgba(180, 50, 50, 0.35);
+}
