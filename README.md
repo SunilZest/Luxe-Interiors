@@ -35,13 +35,7 @@ If the network already exists, Docker will report an error that can be ignored.
 ### 3. Run the API container
 
 ```bash
-docker run -d \
-  --name api \
-  --network luxe-interiors-net \
-  -p 5000:5000 \
-  -e PORT=5000 \
-  -e MONGODB_URI="your-mongodb-connection-string" \
-  sunilnd/luxe_interiors:api
+docker run -d --name api --network luxe-interiors-net -p 5000:5000 -e PORT=5000 -e MONGODB_URI="your-mongodb-connection-string" sunilnd/luxe_interiors:api
 ```
 
 MongoDB is required for contact form submissions. To start the API without MongoDB, omit `MONGODB_URI`; the API will still serve its health endpoint, but it will report MongoDB as disconnected.
@@ -49,11 +43,7 @@ MongoDB is required for contact form submissions. To start the API without Mongo
 ### 4. Run the web container
 
 ```bash
-docker run -d \
-  --name web \
-  --network luxe-interiors-net \
-  -p 8080:80 \
-  sunilnd/luxe_interiors:web
+docker run -d --name web --network luxe-interiors-net -p 8080:80 sunilnd/luxe_interiors:web
 ```
 
 Open the application at <http://localhost:8080>.
