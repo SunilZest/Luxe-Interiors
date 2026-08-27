@@ -24,8 +24,8 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 
 const Layout = () => {
-  const location = useLocation();
-  const isServiceDetail = location.pathname.startsWith('/services/');
+  // const location = useLocation();
+  // const isServiceDetail = location.pathname.startsWith('/services/');
 
   return (
     <div className="app-container">

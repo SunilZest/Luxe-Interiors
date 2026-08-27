@@ -1,0 +1,7 @@
+node_modules
+dist
+.git
+.firebase
+server/node_modules
+server/.env
+*.log

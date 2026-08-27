@@ -11,13 +11,6 @@ dns.setServers(['8.8.8.8', '8.8.4.4', '1.1.1.1']);
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-if (!process.env.MONGODB_URI && !process.env.MONGODB_URI_STANDARD) {
-  console.error(
-    'Set MONGODB_URI (or MONGODB_URI_STANDARD) in server/.env — see server/.env.example.'
-  );
-  process.exit(1);
-}
-
 app.use(cors({ origin: true }));
 app.use(express.json());
 
@@ -64,24 +57,31 @@ async function connectMongo() {
 }
 
 async function start() {
+  const server = app.listen(PORT, () => {
+    console.log(`API listening on http://localhost:${PORT}`);
+  });
+
+  server.on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+      console.error(
+        `Port ${PORT} is already in use. Stop the other process or set PORT in server/.env.`
+      );
+    } else {
+      console.error('Server error:', err.message);
+    }
+    process.exit(1);
+  });
+
+  if (!process.env.MONGODB_URI && !process.env.MONGODB_URI_STANDARD) {
+    console.warn(
+      'MongoDB is not configured. Set MONGODB_URI (or MONGODB_URI_STANDARD) in server/.env.'
+    );
+    return;
+  }
+
   try {
     await connectMongo();
     console.log('Connected to MongoDB Atlas');
-
-    const server = app.listen(PORT, () => {
-      console.log(`API listening on http://localhost:${PORT}`);
-    });
-
-    server.on('error', (err) => {
-      if (err.code === 'EADDRINUSE') {
-        console.error(
-          `Port ${PORT} is already in use. Stop the other process or set PORT in server/.env.`
-        );
-      } else {
-        console.error('Server error:', err.message);
-      }
-      process.exit(1);
-    });
   } catch (err) {
     console.error('Failed to start server:', err.message);
     if (String(process.env.MONGODB_URI || '').startsWith('mongodb+srv://')) {
@@ -89,7 +89,6 @@ async function start() {
         'Tip: If SRV/DNS errors persist, set MONGODB_URI_STANDARD in server/.env (see .env.example).'
       );
     }
-    process.exit(1);
   }
 }
 
